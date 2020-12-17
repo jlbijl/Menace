@@ -26,7 +26,7 @@ class CommandLine(user_interface.UI):
                 print("please provide a single character")
 
     def add_score(self, winner):
-        if winner in [1,2]:
+        if winner in [1, 2]:
             player = self.symbol[winner]
         else:
             player = "Nobody"
