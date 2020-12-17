@@ -14,7 +14,7 @@ _rotations = [[[(2, 0), (1, 0), (0, 0)],
               [[(0, 2), (1, 2), (2, 2)],
                [(0, 1), (1, 1), (2, 1)],
                [(0, 0), (1, 0), (2, 0)]]
-			  ]
+              ]
 
 # flip along vertical axis
 _flip = [[(0, 2), (0, 1), (0, 0)],
@@ -22,17 +22,17 @@ _flip = [[(0, 2), (0, 1), (0, 0)],
          [(2, 2), (2, 1), (2, 0)]]
 
 _win_conditions = [
-        [(0, 0), (0, 1), (0, 2)],
-        [(1, 0), (1, 1), (1, 2)],
-        [(2, 0), (2, 1), (2, 2)],
+    [(0, 0), (0, 1), (0, 2)],
+    [(1, 0), (1, 1), (1, 2)],
+    [(2, 0), (2, 1), (2, 2)],
 
-        [(0, 0), (1, 0), (2, 0)],
-        [(0, 1), (1, 1), (2, 1)],
-        [(0, 2), (1, 2), (2, 2)],
+    [(0, 0), (1, 0), (2, 0)],
+    [(0, 1), (1, 1), (2, 1)],
+    [(0, 2), (1, 2), (2, 2)],
 
-        [(0, 0), (1, 1), (2, 2)],
-        [(2, 0), (1, 1), (0, 2)],
-				   ]
+    [(0, 0), (1, 1), (2, 2)],
+    [(2, 0), (1, 1), (0, 2)],
+]
 
 
 def same_states(s1, s2):
@@ -41,7 +41,8 @@ def same_states(s1, s2):
     """
     s1 = np.array(s1)
     s2 = np.array(s2)
-    return np.any(np.isclose(np.mean(np.square(s1-s2), axis=(1, 2)), 0))
+    return np.any(np.isclose(np.mean(np.square(s1 - s2), axis=(1, 2)), 0))
+
 
 # returns a state based on an original state and a translation matrix
 def _translate(state, translation):
@@ -62,8 +63,8 @@ def _get_minimal_rotation(state):
     smallest_state = state
     flipped = False
     rotated = [[(0, 0), (0, 1), (0, 2)],
-                [(1, 0), (1, 1), (1, 2)],
-                [(2, 0), (2, 1), (2, 2)]]
+               [(1, 0), (1, 1), (1, 2)],
+               [(2, 0), (2, 1), (2, 2)]]
 
     # check if the flipped state is smaller
     flipped_state = _translate(state, _flip)
@@ -79,7 +80,7 @@ def _get_minimal_rotation(state):
             flipped = False
         if _state_str(_translate(flipped_state, rotation)) < _state_str(smallest_state):
             smallest_state = _translate(flipped_state, rotation)
-            rotated=rotation
+            rotated = rotation
             flipped = True
 
     return smallest_state, flipped, rotated
@@ -189,4 +190,3 @@ class Board(object):
             return coordinate
         else:
             raise ValueError('second board should be in minimal state')
-

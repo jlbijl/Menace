@@ -40,6 +40,7 @@ class Menace(player.Player):
         self.game_history = []
         self.output_file = output_file
         if self.output_file:
+            self.staleness = 0
             with open(self.output_file, "wb+") as file:
                 pickle.dump(self.matchboxes, file)
 
@@ -52,8 +53,12 @@ class Menace(player.Player):
             matchbox.reinforce(play=move_coordinate, winner=winner, debug=debug)
 
         if self.output_file:
-            with open(self.output_file, "wb+") as file:
-                pickle.dump(self.matchboxes, file)
+            self.staleness += 1
+            if self.staleness > 100:  # Some threshold for how many games the difference between the file on disk
+                # and the matchboxes in memory is allowed to get before syncing them again.
+                self.staleness = 0
+                with open(self.output_file, "wb+") as file:
+                    pickle.dump(self.matchboxes, file)
 
     # Return a new board representing the move we made
     def move(self, board):
@@ -93,6 +98,7 @@ class Menace(player.Player):
     def show_state(self, round=0):
         for matchbox in self.matchboxes[round]:
             print(matchbox)
+
 
 # Helper class for MENACE
 class Matchbox(object):
