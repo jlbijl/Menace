@@ -95,8 +95,8 @@ class Menace(player.Player):
         print(outcomes)
 
     # Print the state of each matchbox in a certain round to get an idea of the state of the learning
-    def show_state(self, round=0):
-        for matchbox in self.matchboxes[round]:
+    def show_state(self, state_round=0):
+        for matchbox in self.matchboxes[state_round]:
             print(matchbox)
 
 
