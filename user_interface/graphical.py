@@ -1,5 +1,6 @@
 import pygame, pygame.locals
 import sys
+import math
 
 import user_interface
 
@@ -7,6 +8,10 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 black = (0, 0, 0)
 white = (255, 255, 255)
+nought = pygame.image.load("nought-symbol.png")
+nought = pygame.transform.scale(nought, (100, 100))
+cross = pygame.image.load("cross-symbol.png")
+cross = pygame.transform.scale(cross, (100, 100))
 
 
 class Graphical(user_interface.UI):
@@ -25,7 +30,7 @@ class Graphical(user_interface.UI):
         self.score = [0, 0, 0]
         pygame.font.init()
         # font = pygame.font.SysFont("freesansbold", 72)
-        self.font = pygame.font.SysFont(None, 72)
+        self.font = pygame.font.SysFont(None, 36)
 
     def index_to_coord(self, index):
         return index * (self.side_width + self.line_width)
@@ -34,13 +39,18 @@ class Graphical(user_interface.UI):
         return pygame.Rect(self.index_to_coord(coordinate[0]), self.index_to_coord(coordinate[1]), self.side_width, self.side_width)
 
     def draw_x(self, row, col):
-        rect = self.index_to_rect((row, col))
-        pygame.draw.line(self.screen, red, rect.topleft, rect.bottomright, self.line_width)
-        pygame.draw.line(self.screen, red, rect.topright, rect.bottomleft, self.line_width)
+        x_coordinate = self.index_to_coord(row)
+        y_coordinate = self.index_to_coord(col)
+
+        self.screen.blit(cross, ((x_coordinate + 42), (y_coordinate + 42)))
+        # pygame.draw.line(self.screen, red, rect.topleft, rect.bottomright, self.line_width)
+        # pygame.draw.line(self.screen, red, rect.topright, rect.bottomleft, self.line_width)
 
     def draw_o(self, row, col):
-        rect = self.index_to_rect((row, col))
-        pygame.draw.ellipse(self.screen, green, rect, self.line_width)
+        x_coordinate = self.index_to_coord(row)
+        y_coordinate = self.index_to_coord(col)
+        self.screen.blit(nought, ((x_coordinate + 42), (y_coordinate + 42)))
+        # pygame.draw.ellipse(self.screen, green, rect, self.line_width)
 
     def draw_score(self, text, y_index):
         score_text = self.font.render(text, True, black)
@@ -77,8 +87,10 @@ class Graphical(user_interface.UI):
                     if value == 2:
                         self.draw_o(row, col)
 
-        self.draw_score("wins %d/%d" % (self.score[0], sum(self.score)), 110)
-        self.draw_score("(draws %d, losses %d)" % (self.score[2], self.score[1]), 40)
+        self.draw_score("The computer has played %d times and" % (sum(self.score)), 110)
+        self.draw_score("won %d times" % (self.score[0]), 80)
+        self.draw_score("drawn %d times" % (self.score[2]), 50)
+        self.draw_score("lost %d times" % (self.score[1]), 20)
 
         # Update the screen
         pygame.display.update()
@@ -95,8 +107,18 @@ class Graphical(user_interface.UI):
             # print(event)
             if event.type == pygame.locals.QUIT:
                 event.post(event)
+
             elif event.type == pygame.locals.KEYUP:
                 return event.key
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:  # Mouse gone down?
+                posn_of_click = pygame.mouse.get_pos()
+                (x, y) = posn_of_click
+                x_coordinate = (x // 170)
+                y_coordinate = (y // 170)
+                coordinate = (x_coordinate, y_coordinate)
+                return coordinate
+
         return None
 
     def add_score(self, winner):

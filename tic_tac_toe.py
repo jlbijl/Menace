@@ -26,6 +26,7 @@ def play_game():
         ui.tick()
         ui.render(board)
 
+
         if board.winner():
             # Previous game ended, reset board for new game
 
@@ -38,6 +39,7 @@ def play_game():
 
             # Reset board
             board = Board()
+
 
         if board.player() == 1:
             move = player1.move(board)
